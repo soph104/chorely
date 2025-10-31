@@ -9,6 +9,8 @@ const daysInput = document.getElementById("days-input");
 const addBtn = document.getElementById("add-btn");
 const list = document.getElementById("task-list");
 
+console.log("Supabase Client:", supabase);
+
 async function loadTasks() {
   const { data, error } = await supabase.from("tasks").select("*").order("next_due", { ascending: true });
   if (error) return console.error(error);
