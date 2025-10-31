@@ -1,6 +1,6 @@
 body {
-  font-family: Arial, sans-serif;
-  background-color: #f5f7fa;
+  font-family: sans-serif;
+  background: #f5f7fa;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -9,10 +9,10 @@ body {
 
 .container {
   background: white;
-  padding: 2rem;
+  padding: 1.5rem;
   border-radius: 1rem;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
-  width: 320px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  width: 350px;
 }
 
 .input-section {
@@ -31,13 +31,8 @@ button {
   color: white;
   border: none;
   border-radius: 0.25rem;
-  cursor: pointer;
 }
 
-li {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 0.5rem;
-  padding: 0.5rem;
-  border-bottom: 1px solid #ddd;
+.overdue {
+  background: #ffe5e5;
 }
