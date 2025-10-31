@@ -1,5 +1,7 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
+console.log("Supabase Client:", supabase);
+
 const SUPABASE_URL = "https://qrjpcyhvbpxavakmmmpv.supabase.co/";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFyanBjeWh2YnB4YXZha21tbXB2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE3Nzg5OTksImV4cCI6MjA3NzM1NDk5OX0.RtYHYyOFBozohN8SwYFNW0WjGklHaSWbHGlO4Nrp2hk";
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -9,7 +11,6 @@ const daysInput = document.getElementById("days-input");
 const addBtn = document.getElementById("add-btn");
 const list = document.getElementById("task-list");
 
-console.log("Supabase Client:", supabase);
 
 async function loadTasks() {
   const { data, error } = await supabase.from("tasks").select("*").order("next_due", { ascending: true });
