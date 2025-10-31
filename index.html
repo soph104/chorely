@@ -3,26 +3,34 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Shared To-Do List</title>
+  <title>Recurring Task Tracker</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="container">
-    <h1>Shared To-Do List</h1>
+    <h1>Recurring Task Tracker</h1>
 
-    <!-- Add Task Section -->
-    <div class="input-section">
+    <!-- Add Task Toggle Button -->
+    <button id="show-add-form-btn">+ Add Task</button>
+
+    <!-- Add Task Form (hidden by default) -->
+    <div id="add-task-form" class="hidden">
       <input type="text" id="task-input" placeholder="Task name">
       <input type="number" id="days-input" placeholder="Repeat (days)">
+      <input type="number" id="grace-input" placeholder="Grace period (days)">
+      <input type="text" id="emoji-input" placeholder="Emoji">
       <label>
         <input type="checkbox" id="due-now"> Due Now
       </label>
       <button id="add-btn">Add</button>
     </div>
 
-    <!-- Task List Section -->
-    <h2>All Tasks</h2>
-    <ul id="task-list"></ul>
+    <!-- Task Sections -->
+    <h2>Due Now / Overdue</h2>
+    <ul id="due-now-list"></ul>
+
+    <h2>Upcoming</h2>
+    <ul id="upcoming-list"></ul>
   </div>
 
   <script type="module" src="script.js"></script>

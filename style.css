@@ -3,7 +3,6 @@ body {
   background: #f5f7fa;
   display: flex;
   justify-content: center;
-  align-items: flex-start;
   padding-top: 2rem;
 }
 
@@ -12,22 +11,22 @@ body {
   padding: 2rem;
   border-radius: 1rem;
   box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-  width: 400px;
+  width: 450px;
 }
 
-.input-section {
-  display: flex;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
+.hidden {
+  display: none;
 }
 
 input {
-  flex: 1;
   padding: 0.5rem;
+  margin: 0.25rem 0;
+  width: 100%;
 }
 
 button {
   padding: 0.5rem 1rem;
+  margin-top: 0.5rem;
   background: #007bff;
   color: white;
   border: none;
@@ -42,10 +41,10 @@ ul {
 
 li {
   display: flex;
+  align-items: center;
   justify-content: space-between;
   padding: 0.5rem;
   border-bottom: 1px solid #ddd;
-  align-items: center;
 }
 
 li.overdue {
@@ -56,12 +55,11 @@ li.due-now {
   background-color: #fff8b0;
 }
 
-li span {
-  display: block;
+li .emoji {
+  font-size: 2rem;
+  margin-right: 0.5rem;
 }
 
-li small {
-  display: block;
-  color: gray;
-  font-size: 0.8rem;
+li .task-info {
+  flex: 1;
 }
