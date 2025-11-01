@@ -11,6 +11,7 @@ const showAddBtn = document.getElementById("show-add-form-btn");
 const addForm = document.getElementById("add-task-form");
 const input = document.getElementById("task-input");
 const daysInput = document.getElementById("days-input");
+const weeksInput = document.getElementById("weeks-input");
 const graceInput = document.getElementById("grace-input");
 const emojiInput = document.getElementById("emoji-input");
 const dueNowCheckbox = document.getElementById("due-now");
@@ -49,7 +50,7 @@ function renderTasks(tasks) {
     else if (isOverdue) li.classList.add("overdue");
 
     li.innerHTML = `
-      <span class="emoji">${task.emoji || "📌"}</span>
+      <span class="emoji">${task.emoji || "⬜"}</span>
       <div class="task-info">
         <strong>${task.title}</strong><br>
         <small>Next due: ${nextDue.toLocaleDateString()}</small>
@@ -69,10 +70,11 @@ function renderTasks(tasks) {
 
 // Add new task
 async function addTask() {
+  console.log("Addtask called")
   const title = input.value.trim();
-  const interval = parseInt(daysInput.value);
+  const interval = parseInt(daysInput.value) + parseInt(weeksInput.value)*7 || 0;
   const grace = parseInt(graceInput.value) || 0;
-  const emoji = emojiInput.value || "📌";
+  const emoji = emojiInput.value || ""; //Default emoji todo
   const dueNow = dueNowCheckbox.checked ? "yes" : "no";
 
   if (!title || !interval) return alert("Enter task and interval");

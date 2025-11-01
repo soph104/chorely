@@ -1,21 +1,35 @@
 body {
-  font-family: sans-serif;
-  background: #f5f7fa;
+  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;                                                         
+  background: #242121;;
   display: flex;
   justify-content: center;
   padding-top: 2rem;
+  color: white;
 }
 
 .container {
-  background: white;
+  background: #3a3535;
   padding: 2rem;
   border-radius: 1rem;
   box-shadow: 0 4px 10px rgba(0,0,0,0.1);
   width: 450px;
 }
 
+.subcontainer {
+  background: #575151;
+  padding: 1.5rem;
+  border-radius: 1.5rem;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  width: 400px;
+  margin-top: 15px;
+}
+
 .hidden {
   display: none;
+}
+
+h2 {
+  margin: 0;
 }
 
 input {
@@ -25,13 +39,26 @@ input {
 }
 
 button {
-  padding: 0.5rem 1rem;
   margin-top: 0.5rem;
-  background: #007bff;
-  color: white;
+  background: inherit;
   border: none;
-  border-radius: 0.25rem;
+  border-radius: 2rem;
   cursor: pointer;
+  font-size: xx-large;
+}
+
+.newTask {
+  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;                       
+  margin-top: 0.5rem;
+  background: inherit;
+  border: none;
+  border-radius: 1.5rem;
+  cursor: pointer;
+  padding: 10px;
+  font-size: xx-large;
+  background-color: rgb(9, 102, 22);
+  float: right;
+  color: inherit;
 }
 
 ul {
@@ -45,6 +72,9 @@ li {
   justify-content: space-between;
   padding: 0.5rem;
   border-bottom: 1px solid #ddd;
+  background: #737374;
+  border-radius: 10px;
+  margin-bottom: 10px;
 }
 
 li.overdue {

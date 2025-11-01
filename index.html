@@ -1,21 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Recurring Task Tracker</title>
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
   <div class="container">
-    <h1>Recurring Task Tracker</h1>
-
     <!-- Add Task Toggle Button -->
-    <button id="show-add-form-btn">+ Add Task</button>
+    <button class = "newTask" id="show-add-form-btn">New</button>
+
+    <h1>Chorely</h1>
+
 
     <!-- Add Task Form (hidden by default) -->
     <div id="add-task-form" class="hidden">
       <input type="text" id="task-input" placeholder="Task name">
+      <input type="number" id="weeks-input" placeholder="Repeat (weeks)">
       <input type="number" id="days-input" placeholder="Repeat (days)">
       <input type="number" id="grace-input" placeholder="Grace period (days)">
       <input type="text" id="emoji-input" placeholder="Emoji">
@@ -26,13 +30,18 @@
     </div>
 
     <!-- Task Sections -->
-    <h2>Due Now / Overdue</h2>
-    <ul id="due-now-list"></ul>
+    <div class="subcontainer" id="due-now-section">
+      <h2>Due Now / Overdue</h2>
+      <ul id="due-now-list"></ul>
+    </div>
 
-    <h2>Upcoming</h2>
-    <ul id="upcoming-list"></ul>
+    <div class="subcontainer" id="upcoming-section">
+      <h2>Upcoming</h2>
+      <ul id="upcoming-list"></ul>
+    </div>
   </div>
 
   <script type="module" src="script.js"></script>
 </body>
+
 </html>
