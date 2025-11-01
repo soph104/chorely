@@ -1,31 +1,44 @@
+:root {
+  --background-color: #ffffff;
+  --text-color: #000000;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background-color: #302a2a;
+    --container-background-color: #423c3c;
+    --text-color: #e8e7dc;
+  }
+}
+
 body {
   font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;                                                         
-  background: #242121;;
+  background-color: var(--background-color);
   display: flex;
-  justify-content: center;
-  padding-top: 2rem;
-  color: white;
+  flex-direction: column;
+  align-items: center;
+  padding: 0;
+  margin: 0;
+  color: var(--text-color);
 }
 
-.container {
-  background: #3a3535;
-  padding: 2rem;
-  border-radius: 1rem;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-  width: 450px;
-}
-
-.subcontainer {
-  background: #575151;
-  padding: 1.5rem;
-  border-radius: 1.5rem;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-  width: 400px;
-  margin-top: 15px;
+main {
+  width: 100%;
+  max-width: 450px;
+  padding: 1rem;
 }
 
 .hidden {
   display: none;
+}
+
+header {
+  display: block;
+  max-width: 450px;
+  text-align: right;
+  padding: 1rem;
+  width: 100%;
+  align-items: right;
 }
 
 h2 {
@@ -39,25 +52,28 @@ input {
 }
 
 button {
-  margin-top: 0.5rem;
   background: inherit;
   border: none;
-  border-radius: 2rem;
+  border-radius: 1.5rem;
   cursor: pointer;
   font-size: xx-large;
+  color: inherit;
 }
 
-.newTask {
-  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;                       
-  margin-top: 0.5rem;
+button.hidden {
+  display: none;
+}
+
+.headerButton {
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-size: small;
   background: inherit;
   border: none;
   border-radius: 1.5rem;
   cursor: pointer;
   padding: 10px;
-  font-size: xx-large;
-  background-color: rgb(9, 102, 22);
-  float: right;
+  font-size: large;
+  background-color: var(--container-background-color);
   color: inherit;
 }
 
@@ -71,22 +87,14 @@ li {
   align-items: center;
   justify-content: space-between;
   padding: 0.5rem;
-  border-bottom: 1px solid #ddd;
-  background: #737374;
+  background: var(--container-background-color);
   border-radius: 10px;
   margin-bottom: 10px;
-}
-
-li.overdue {
-  background-color: #ffe5e5;
-}
-
-li.due-now {
-  background-color: #fff8b0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 li .emoji {
-  font-size: 2rem;
+  font-size: 2.5rem;
   margin-right: 0.5rem;
 }
 

@@ -16,13 +16,30 @@ const graceInput = document.getElementById("grace-input");
 const emojiInput = document.getElementById("emoji-input");
 const dueNowCheckbox = document.getElementById("due-now");
 const addBtn = document.getElementById("add-btn");
+const editTaskBtn = document.getElementById("edit-task-btn");
 
 const dueNowList = document.getElementById("due-now-list");
 const upcomingList = document.getElementById("upcoming-list");
 
+let isEditMode = false;
+
+editTaskBtn.addEventListener("click", () => {
+  isEditMode = !isEditMode;
+  editTaskBtn.textContent = isEditMode ? "Done" : "Edit";
+  loadTasks(); // re-render with updated edit mode state
+});
+
 // Toggle add task form
 showAddBtn.addEventListener("click", () => {
   addForm.classList.toggle("hidden");
+});
+
+// Toggle upcoming tasks visibility
+const allTasksBtn = document.getElementById("all-tasks-btn");
+const upcomingSection = document.getElementById("upcoming-section");
+
+allTasksBtn.addEventListener("click", () => {
+  upcomingSection.classList.toggle("hidden");
 });
 
 // Load tasks
@@ -43,27 +60,52 @@ function renderTasks(tasks) {
     const grace = task.grace_period || 0;
     const dueDateWithGrace = new Date(nextDue);
     dueDateWithGrace.setDate(dueDateWithGrace.getDate() + grace);
-    const isOverdue = task.due === "yes" && today > dueDateWithGrace;
+    const isOverdue = today > dueDateWithGrace;
+    const isDueNow = today >= nextDue && today <= dueDateWithGrace;
+
+    const weekday = nextDue.toLocaleDateString('en-US', { weekday: 'short' });
 
     const li = document.createElement("li");
-    if (task.due === "yes" && !isOverdue) li.classList.add("due-now");
-    else if (isOverdue) li.classList.add("overdue");
-
     li.innerHTML = `
       <span class="emoji">${task.emoji || "⬜"}</span>
       <div class="task-info">
         <strong>${task.title}</strong><br>
-        <small>${nextDue.toLocaleDateString()}</small>
-      </div>
-      <div>
-        <button onclick="completeTask(${task.id}, ${task.interval_days})">✅</button>
-        <button onclick="editTask(${task.id})">✏️</button>
-        <button onclick="deleteTask(${task.id})">🗑️</button>
+        <small>${weekday}, ${nextDue.toLocaleDateString()}</small>
       </div>
     `;
 
-    if (task.due === "yes" || isOverdue) dueNowList.appendChild(li);
-    else upcomingList.appendChild(li);
+    const buttonContainer = document.createElement("div");
+
+    const completeButton = document.createElement("button");
+    completeButton.textContent = "✅";
+    completeButton.addEventListener("click", () => completeTask(task.id, task.interval_days));
+
+    const editButton = document.createElement("button");
+    editButton.textContent = "✏️";
+    editButton.addEventListener("click", () => editTask(task.id));
+
+    const deleteButton = document.createElement("button");
+    deleteButton.textContent = "🗑️";
+    deleteButton.addEventListener("click", () => deleteTask(task.id));
+
+    // 🔒 Hide or show based on mode
+    if (!isEditMode) {
+      editButton.classList.add("hidden");
+      deleteButton.classList.add("hidden");
+    }
+
+    buttonContainer.appendChild(completeButton);
+    buttonContainer.appendChild(editButton);
+    buttonContainer.appendChild(deleteButton);
+
+    li.appendChild(buttonContainer);
+
+    if (isDueNow || isOverdue) {
+      li.classList.add(isOverdue ? "overdue" : "due-now");
+      dueNowList.appendChild(li);
+    } else {
+      upcomingList.appendChild(li);
+    }
   });
 }
 
@@ -100,6 +142,7 @@ async function addTask() {
 
 // Complete task
 window.completeTask = async function(id, interval) {
+  console.log("Complete task clicked", { id, interval });
   const nextDue = new Date();
   nextDue.setDate(nextDue.getDate() + interval);
 
@@ -113,6 +156,7 @@ window.completeTask = async function(id, interval) {
 
 // Delete task
 window.deleteTask = async function(id) {
+  console.log("Delete task clicked", { id });
   if (!confirm("Are you sure you want to delete this task?")) return;
   const { error } = await supabase.from("tasks").delete().eq("id", id);
   if (error) return console.error(error);
@@ -121,6 +165,7 @@ window.deleteTask = async function(id) {
 
 // Edit task (inline prompt)
 window.editTask = async function(id) {
+  console.log("Edit task clicked", { id });
   const { data } = await supabase.from("tasks").select("*").eq("id", id).single();
   if (!data) return;
 

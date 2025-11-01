@@ -9,15 +9,15 @@
 </head>
 
 <body>
-  <div class="container">
-    <!-- Add Task Toggle Button -->
-    <button class = "newTask" id="show-add-form-btn">New</button>
+  <header>
+    <button class="headerButton" id="all-tasks-btn">All</button>
+    <button class="headerButton" id="edit-task-btn">Edit</button>
+    <button class="headerButton" id="show-add-form-btn">New</button>
+  </header>
 
-    <h1>Chorely</h1>
-
-
+  <main>
     <!-- Add Task Form (hidden by default) -->
-    <div id="add-task-form" class="hidden">
+    <section id="add-task-form" class="hidden">
       <input type="text" id="task-input" placeholder="Task name">
       <input type="number" id="weeks-input" placeholder="Repeat (weeks)">
       <input type="number" id="days-input" placeholder="Repeat (days)">
@@ -27,19 +27,19 @@
         <input type="checkbox" id="due-now"> Due Now
       </label>
       <button id="add-btn">Add</button>
-    </div>
+    </section>
 
     <!-- Task Sections -->
-    <div class="subcontainer" id="due-now-section">
-      <h2>Due Now / Overdue</h2>
+    <section id="due-now-section">
+      <h2>Due Now</h2>
       <ul id="due-now-list"></ul>
-    </div>
+    </section>
 
-    <div class="subcontainer" id="upcoming-section">
+    <section id="upcoming-section" class="hidden">
       <h2>Upcoming</h2>
       <ul id="upcoming-list"></ul>
-    </div>
-  </div>
+    </section>
+  </main>
 
   <script type="module" src="script.js"></script>
 </body>
