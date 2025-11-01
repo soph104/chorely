@@ -17,15 +17,25 @@
 
   <main>
     <!-- Add Task Form (hidden by default) -->
-    <section id="add-task-form" class="hidden">
-      <input type="text" id="task-input" placeholder="Task name">
-      <input type="number" id="weeks-input" placeholder="Repeat (weeks)">
-      <input type="number" id="days-input" placeholder="Repeat (days)">
-      <input type="number" id="grace-input" placeholder="Grace period (days)">
-      <input type="text" id="emoji-input" placeholder="Emoji">
-      <label>
-        <input type="checkbox" id="due-now"> Due Now
+    <section id="add-task-form" class="task-form hidden">
+      <div class="form-group emoji">
+        <input type="text" id="emoji-input" maxlength="2" placeholder="😊">
+      </div>
+    
+      <div class="form-group">
+        <input type="text" id="task-input" placeholder="Task name">
+      </div>
+      <div class="form-row">
+        <input type="number" id="weeks-input" placeholder="Weeks">
+        <input type="number" id="days-input" placeholder="Days">
+        <input type="number" id="grace-input" placeholder="Buffer days">
+      </div>
+    
+      <label class="toggle">
+        <input type="checkbox" id="due-now">
+        <span class="toggle-label">Due Now</span>
       </label>
+    
       <button id="add-btn">Add</button>
     </section>
 
