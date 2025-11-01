@@ -53,8 +53,7 @@ function renderTasks(tasks) {
       <span class="emoji">${task.emoji || "⬜"}</span>
       <div class="task-info">
         <strong>${task.title}</strong><br>
-        <small>Next due: ${nextDue.toLocaleDateString()}</small>
-        <small>Grace: ${grace} day(s)</small>
+        <small>${nextDue.toLocaleDateString()}</small>
       </div>
       <div>
         <button onclick="completeTask(${task.id}, ${task.interval_days})">✅</button>
@@ -72,7 +71,9 @@ function renderTasks(tasks) {
 async function addTask() {
   console.log("Addtask called")
   const title = input.value.trim();
-  const interval = parseInt(daysInput.value) + parseInt(weeksInput.value)*7 || 0;
+  const intervalDays = parseInt(daysInput.value) || 0;
+  const intervalWeeks = parseInt(weeksInput.value) || 0;
+  const interval = intervalDays + (intervalWeeks * 7);
   const grace = parseInt(graceInput.value) || 0;
   const emoji = emojiInput.value || ""; //Default emoji todo
   const dueNow = dueNowCheckbox.checked ? "yes" : "no";
