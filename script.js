@@ -91,6 +91,7 @@ async function addTask() {
 
   input.value = "";
   daysInput.value = "";
+  weeksInput.value = "";
   graceInput.value = "";
   emojiInput.value = "";
   dueNowCheckbox.checked = false;
