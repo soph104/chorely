@@ -141,14 +141,15 @@ document.addEventListener("DOMContentLoaded", async () => {
       window.history.replaceState({}, "", "?" + newParams.toString());
     }
 
-    // Now load tasks scoped to this household/user
-    loadTasks(householdId, userId);
+    // Now load tasks scoped to this household
+    loadTasks(householdId);
   }
 
-  async function loadTasks() {
+  async function loadTasks(householdId) {
     const { data, error } = await supabase
       .from("tasks")
       .select("*")
+      .eq("household_id", householdId)
       .order("next_due", { ascending: true });
 
     if (error) return console.error(error);
