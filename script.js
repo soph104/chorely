@@ -6,6 +6,78 @@ const SUPABASE_URL = "https://qrjpcyhvbpxavakmmmpv.supabase.co/";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFyanBjeWh2YnB4YXZha21tbXB2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE3Nzg5OTksImV4cCI6MjA3NzM1NDk5OX0.RtYHYyOFBozohN8SwYFNW0WjGklHaSWbHGlO4Nrp2hk";
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+
+const params = new URLSearchParams(window.location.search);
+let householdId = params.get("household");
+let userId = params.get("user");
+let householdPwd = params.get("pwd");
+
+async function init() {
+  const { data: households } = await supabase.from("households").select("*");
+
+  // 1️⃣ Household selection or creation
+  if (!householdId) {
+    let householdName = prompt(
+      "Enter your household name:\n" + households.map(h => h.name).join("\n")
+    );
+
+    let household = households.find(h => h.name === householdName);
+
+    if (household) {
+      // Ask for password if exists
+      if (household.password) {
+        let pwdAttempt = prompt("Enter household password:");
+        while (pwdAttempt !== household.password) {
+          pwdAttempt = prompt("Incorrect password. Try again:");
+        }
+        householdPwd = pwdAttempt;
+      }
+    } else {
+      // Create new household
+      let pwd = prompt("New household! Enter a password (optional):");
+      const { data: newHousehold } = await supabase.from("households")
+        .insert([{ name: householdName, password: pwd }])
+        .select().single();
+      household = newHousehold;
+      householdPwd = pwd;
+    }
+
+    householdId = household.id;
+  }
+
+  // 2️⃣ User selection or creation
+  const { data: householdData } = await supabase.from("households").select("*").eq("id", householdId).single();
+  const users = householdData.users || [];
+
+  if (!userId) {
+    let userName = prompt("Enter your name:\n" + users.map(u => u.name).join("\n"));
+    let user = users.find(u => u.name === userName);
+
+    if (!user) {
+      user = { id: crypto.randomUUID(), name: userName };
+      users.push(user);
+      await supabase.from("households").update({ users }).eq("id", householdId);
+    }
+
+    userId = user.id;
+  }
+
+  // 3️⃣ Save to URL params
+  const newParams = new URLSearchParams();
+  newParams.set("household", householdId);
+  newParams.set("user", userId);
+  if (householdPwd) newParams.set("pwd", householdPwd);
+  window.history.replaceState({}, "", "?" + newParams.toString());
+
+  // 4️⃣ Now load tasks scoped to this household/user
+  loadTasks(householdId, userId);
+}
+
+init();
+
+
+
+
 document.addEventListener("DOMContentLoaded", () => {
 
   // === DOM ELEMENTS ===
@@ -24,11 +96,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const allTasksBtn = document.getElementById("all-tasks-btn");
   const upcomingSection = document.getElementById("upcoming-section");
 
-  // Sanity check
-  if (!showAddBtn || !addForm) {
-    console.error("Missing essential DOM elements");
-    return;
-  }
+  // Ensure initial ARIA state
+  showAddBtn.setAttribute("aria-expanded", addForm.classList.contains("hidden") ? "false" : "true");
 
   // === STATE ===
   let isEditMode = false;
@@ -38,12 +107,36 @@ document.addEventListener("DOMContentLoaded", () => {
   editTaskBtn.addEventListener("click", () => {
     isEditMode = !isEditMode;
     editTaskBtn.textContent = isEditMode ? "Done" : "Edit";
-    loadTasks(); // re-render with updated edit mode state
+    loadTasks();
   });
 
-  // Toggle add task form
+  // Toggle add task form with robust handling
   showAddBtn.addEventListener("click", () => {
+    // preferred: toggle the class
+    const hadHidden = addForm.classList.contains("hidden");
     addForm.classList.toggle("hidden");
+
+    // If toggling didn't actually change computed visibility (CSS override?), fallback to style
+    const computed = window.getComputedStyle(addForm).display;
+    if (hadHidden && computed === "none") {
+      // still hidden after toggle -> force show
+      addForm.classList.remove("hidden");
+      addForm.style.display = ""; // let CSS decide (or remove inline override)
+    } else if (!hadHidden && computed !== "none") {
+      // still visible after toggle -> force hide
+      addForm.classList.add("hidden");
+      addForm.style.display = "none";
+    } else {
+      // normal case: remove any inline style fallback
+      addForm.style.removeProperty("display");
+    }
+
+    // Update button label and aria
+    const isVisible = window.getComputedStyle(addForm).display !== "none";
+    showAddBtn.textContent = isVisible ? "Close" : "New";
+    showAddBtn.setAttribute("aria-expanded", isVisible ? "true" : "false");
+
+    console.log("Toggled add form. visible:", isVisible, "classList contains hidden:", addForm.classList.contains("hidden"));
   });
 
   // Toggle upcoming tasks visibility
@@ -163,7 +256,12 @@ document.addEventListener("DOMContentLoaded", () => {
     graceInput.value = "";
     emojiInput.value = "";
     dueNowCheckbox.checked = false;
+
+    // hide the form and update button
     addForm.classList.add("hidden");
+    addForm.style.display = "none";
+    showAddBtn.textContent = "New";
+    showAddBtn.setAttribute("aria-expanded", "false");
 
     loadTasks();
   }
