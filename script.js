@@ -70,7 +70,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // Update button label and aria
     const isVisible = window.getComputedStyle(addForm).display !== "none";
-    showAddBtn.textContent = isVisible ? "Close" : "New";
+    showAddBtn.textContent = isVisible ? "Close" : "New Task";
     showAddBtn.setAttribute("aria-expanded", isVisible ? "true" : "false");
 
     console.log("Toggled add form. visible:", isVisible, "classList contains hidden:", addForm.classList.contains("hidden"));
