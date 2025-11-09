@@ -89,7 +89,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   // === FUNCTIONS ===
 
   async function init() {
-    // Household selection / creation
+    // Don't load tasks until we have a valid householdId
     if (!householdId) {
       let householdName = prompt("Enter your household name:");
       // Query Supabase for that household
@@ -97,7 +97,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         .from("households")
         .select("*")
         .eq("name", householdName)
-        .maybeSingle(); // returns single row or null
+        .maybeSingle();
 
       if (error) {
         console.error("Error fetching household:", error);
@@ -113,6 +113,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           }
           householdPwd = pwdAttempt;
         }
+        householdId = household.id;
       } else {
         // New household password
         householdPwd = prompt("Create a password (optional):") || "";
@@ -128,11 +129,9 @@ document.addEventListener("DOMContentLoaded", async () => {
           return;
         }
 
-        household = newHousehold;
-        console.log("Created household:", household);
+        householdId = newHousehold.id;
+        console.log("Created household:", newHousehold);
       }
-
-      householdId = household.id;
 
       // Save to URL
       const newParams = new URLSearchParams();
@@ -140,8 +139,10 @@ document.addEventListener("DOMContentLoaded", async () => {
       window.history.replaceState({}, "", "?" + newParams.toString());
     }
 
-    // Now load tasks scoped to this household
-    loadTasks(householdId);
+    // Only load tasks once we have a valid householdId
+    if (householdId) {
+      await loadTasks(householdId);
+    }
   }
 
   async function loadTasks(householdId) {
