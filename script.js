@@ -137,7 +137,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       // Save to URL
       const newParams = new URLSearchParams();
       newParams.set("household", householdId);
-      if (householdPwd) newParams.set("pwd", householdPwd);
       window.history.replaceState({}, "", "?" + newParams.toString());
     }
 
